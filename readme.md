@@ -61,31 +61,11 @@ Create the view - create new folder in `resources/views/` named `pages`. In `pag
 @endsection
 ```
 
-# How to create a list of users using Artisan
+# How to create a list of dummy users using Artisan Tinker
 
 Run `php artisan tinker`.
 
 Then run `factory(\App\User::class, 100)->create();`. This will create 100 users.
-
-# How to call PUT and DELETE from Ajax
-
-You need to method spoofing when calling `PUT` and `DELETE` method in Laravel since HTTP call does not capture other that `GET` and `POST`. Following are the sample code when you need to call a `PUT` or `DELETE` URI using Ajax.
-
-```javascript
-function confirmDelete(id)
-{
-	if(confirm('Are you sure'))
-	{
-		var data = {
-			_token : window.Laravel.csrfToken,
-			_method : 'delete'
-		}
-		$.post('/users/' + id, data, function(data, textStatus, xhr) {
-			// do something
-		});
-	}
-}
-```
 
 # How to create a validator
 
@@ -188,10 +168,26 @@ Open up `database\seeds\DatabaseSeeder.php` and call the `PostTableSeeder` as fo
 ```php
 public function run()
 {
-    $this->call(PostTableSeeder::class);
+    $this->call(PostSeeder::class);
 }
 ```
 
 # How to seed data
 
-Run `php artisan db:seed`
+Following command will seed data by calling `DatabaseSeeder.php`:
+
+```
+php artisan db:seed
+```
+
+Following command will seed data by calling seeder class name:
+
+```
+php artisan db:seed --class=PostSeeder
+```
+
+Following command will seed data after do the migration:
+
+```
+php artisan migrate --seed
+```
