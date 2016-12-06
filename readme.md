@@ -23,6 +23,7 @@
 - [ ] How to call model factory in seeder file?
 - [ ] How to call seeder file in `DatabaseSeeder.php`?
 - [ ] How to seed data?
+- [ ] How to create relationship?
 
 # How to create a page
 
@@ -194,4 +195,83 @@ Following command will seed data after do the migration:
 
 ```
 php artisan migrate --seed
+```
+
+# Relationships
+
+3 basic steps required to setup relationship between tables.
+
+## Setup Foreign Key
+
+Let say we want to have a user has many posts.
+
+Create migration script:
+
+```
+php artisan make:migration add_post_owner --table=posts
+```
+
+Open up the `timestamp_add_post_owner.php` migration script and add the following in `up` and `down` method respectively.
+
+```
+Schema::table('posts', function (Blueprint $table) {
+    $table->integer('user_id')->unsigned()->after('id');
+});
+```
+
+```
+Schema::table('posts', function (Blueprint $table) {
+    $table->dropColumn('user_id');
+});
+```
+
+Then we run `php artisan migrate`.
+
+## Update `ModelFactory.php`
+
+Update the `App\Post` model factory by adding `user_id`.
+
+```
+$factory->define(App\Post::class, function (Faker\Generator $faker) {
+    return [
+        'user_id' => $faker->randomElement(range(1, 100)),
+        'post' => $faker->paragraph,
+    ];
+});
+```
+
+## Define Relationships in Models
+
+Next we need to add relationship between related models, in this case we need `User` and `Post` model.
+
+For `User` model, a user has many posts, add the following method `app/User.php`:
+
+```php
+public function posts()
+{
+    return $this->hasMany('App\Post');
+}
+```
+
+For `Post` model, a post belongs to user, add the following method `app/Post.php`:
+
+```php
+public function user()
+{
+    return $this->belongsTo('App\User');
+}
+```
+
+Once you're done setting up the relationships, you may use the models like:
+
+```php
+$user = User::find(1);
+// just dump all the posts
+dd($user->posts);
+```
+
+```php
+$post = Post::find(1);
+// echo the owner of the post
+$post->user->name;
 ```

@@ -9,7 +9,7 @@
                 <div class="panel-body">
                     <form class="form-horizontal" role="form" method="POST" action="{{ route('posts.store') }}">
                         {{ csrf_field() }}
-
+                        <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
                         <div class="form-group{{ $errors->has('post') ? ' has-error' : '' }}">
                             <label for="post" class="col-md-4 control-label">Post</label>
 
