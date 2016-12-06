@@ -18,5 +18,7 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index');
+Route::get('/about-us', 'StaticPageController@aboutUs')->name('static.aboutUs');
+Route::get('/contact-us', 'StaticPageController@contactUs')->name('static.contactUs');
 
 Route::resource('users', 'UserController');
