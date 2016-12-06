@@ -147,7 +147,9 @@ $factory->define(App\Post::class, function (Faker\Generator $faker) {
 });
 ```
 
-# How to create seeder file and seed the data
+# Seeds
+
+## How to Create Seeder
 
 Create a seeder file using following command:
 
@@ -161,7 +163,7 @@ Open `PostTableSeeder.php` located at `database\seeds` folder and call the facto
 factory(\App\Post::class, 100)->create();
 ```
 
-# How to call seeder file
+## How to Call Another Seeder
 
 Open up `database\seeds\DatabaseSeeder.php` and call the `PostTableSeeder` as following:
 
@@ -172,7 +174,9 @@ public function run()
 }
 ```
 
-# How to seed data
+## How to Seed Data
+
+There's three ways in seeding data.
 
 Following command will seed data by calling `DatabaseSeeder.php`:
 
