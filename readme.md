@@ -1,40 +1,197 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img width="150"src="https://laravel.com/laravel.png"></a></p>
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
-</p>
+# Syllabus Checklist
 
-## About Laravel
+- [ ] How to create a new Laravel project?
+- [ ] How to create a page?
+- [ ] How to create a route?
+- [ ] How to create a controller?
+- [ ] How to create a view?
+- [ ] How to create users from tinker?
+- [ ] How to read a record?
+- [ ] How to read records?
+- [ ] How to create pagination?
+- [ ] How to create a form?
+- [ ] How to validate form using Request?
+- [ ] How to validate form in Controller?
+- [ ] How to insert a new record?
+- [ ] How to update a record?
+- [ ] How to create method spoofing?
+- [ ] How to get error messages from validators?
+- [ ] How to create a model and migration script together?
+- [ ] How to create a model factory?
+- [ ] How to create seeder file?
+- [ ] How to call model factory in seeder file?
+- [ ] How to call seeder file in `DatabaseSeeder.php`?
+- [ ] How to seed data?
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Laravel attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as:
+# How to create a page
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Route
 
-Laravel is accessible, yet powerful, providing tools needed for large, robust applications. A superb combination of simplicity, elegance, and innovation give you tools you need to build any application with which you are tasked.
+Set Route - `routes/web.php`
 
-## Learning Laravel
+```php
+Route::get('about-us','PageController@aboutUs')
+```
 
-Laravel has the most extensive and thorough documentation and video tutorial library of any modern web application framework. The [Laravel documentation](https://laravel.com/docs) is thorough, complete, and makes it a breeze to get started learning the framework.
+## Controller
 
-If you're not in the mood to read, [Laracasts](https://laracasts.com) contains over 900 video tutorials on a range of topics including Laravel, modern PHP, unit testing, JavaScript, and more. Boost the skill level of yourself and your entire team by digging into our comprehensive video library.
+Create a controller - `php artisan make:controller PageController --resource` - and create a method `aboutUs` returning view from `pages.index`.
 
-## Contributing
+```php
+public function aboutUs()
+{
+	return view('pages.index');
+}
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](http://laravel.com/docs/contributions).
+## View
 
-## Security Vulnerabilities
+Create the view - create new folder in `resources/views/` named `pages`. In `pages`, create `aboutUs.blade.php`. Add the following content:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell at taylor@laravel.com. All security vulnerabilities will be promptly addressed.
+```html
+@extends('layouts.app')
 
-## License
+@section('content')
+<div class="container">
+    <div class="row">
+		<h1>About Us</h1>
+    </div>
+</div>
+@endsection
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT).
+# How to create a list of users using Artisan
+
+Run `php artisan tinker`.
+
+Then run `factory(\App\User::class, 100)->create();`. This will create 100 users.
+
+# How to call PUT and DELETE from Ajax
+
+You need to method spoofing when calling `PUT` and `DELETE` method in Laravel since HTTP call does not capture other that `GET` and `POST`. Following are the sample code when you need to call a `PUT` or `DELETE` URI using Ajax.
+
+```javascript
+function confirmDelete(id)
+{
+	if(confirm('Are you sure'))
+	{
+		var data = {
+			_token : window.Laravel.csrfToken,
+			_method : 'delete'
+		}
+		$.post('/users/' + id, data, function(data, textStatus, xhr) {
+			// do something
+		});
+	}
+}
+```
+
+# How to create a validator
+
+Create custom request by running `php artisan make:request UserRequest`.
+
+Open `UserRequest.php` located at `app/Http/Requests`.
+
+Add validation rules for your form at `rules()` method:
+
+```php
+return [
+    'name' => 'required|min:6|max:255',
+    'email' => 'required|email|max:255|unique:users',
+    'password' => 'required|min:6|confirmed',
+];
+```
+
+Next, include `UserRequest` namespace in `UserController` - `use App\Http\Requests\UserRequest;`. 
+
+Now in `UserController`'s `store(Request $request)` method, replace `store(Request $request)` with `store(UserRequest $request)`.
+
+## To display error message
+
+Following are the sample to display an error message
+
+```html
+@if ($errors->has('email'))
+    <span class="help-block">
+        <strong>{{ $errors->first('email') }}</strong>
+    </span>
+@endif
+```
+
+## Authorization
+
+You may return to `true` in `UserRequest`'s `authorize()` method if there's no particular authorization required.
+
+```php
+public function authorize()
+{
+    return true;
+}
+```
+
+## Validation from within Controller
+
+```php
+$this->validate($request, [
+    'name' => 'required|min:6|max:255',
+    'password' => 'required|min:6|confirmed',
+]);
+```
+
+# How to create a model and migration script together?
+
+Just run following command:
+
+```php
+php artisan make:model Post -m
+```
+
+This will create a model named `Post.php` in `app` folder and a migration script `timestamp_create_posts_table.php` in `database\migrations` folder.
+
+Read more about [Creating Columns](https://laravel.com/docs/5.3/migrations#creating-columns)
+
+After done adding columns, run `php artisan migrate` to run the migration script and have your tables in database.
+
+# How to create model factory
+
+Open up `database\factories\ModelFactory.php` and copy the user's factory and update as following:
+
+```php
+$factory->define(App\Post::class, function (Faker\Generator $faker) {
+    
+    return [
+        'title' => $faker->sentence,
+        'description' => $faker->text
+    ];
+});
+```
+
+# How to create seeder file and seed the data
+
+Create a seeder file using following command:
+
+```php
+php artisan make:seeder PostTableSeeder
+```
+
+Open `PostTableSeeder.php` located at `database\seeds` folder and call the factory for `Post`, as following in `run` method:
+
+```php
+factory(\App\Post::class, 100)->create();
+```
+
+# How to call seeder file
+
+Open up `database\seeds\DatabaseSeeder.php` and call the `PostTableSeeder` as following:
+
+```php
+public function run()
+{
+    $this->call(PostTableSeeder::class);
+}
+```
+
+# How to seed data
+
+Run `php artisan db:seed`
