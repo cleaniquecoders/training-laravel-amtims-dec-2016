@@ -73,7 +73,7 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        User::where('id', $id)->update($request->except('_token'));
+        User::where('id', $id)->update($request->only('name', 'email'));
         return redirect()->route('users.index');
     }
 
