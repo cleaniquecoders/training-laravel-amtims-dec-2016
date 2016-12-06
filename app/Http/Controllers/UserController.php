@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\User;
+use Auth;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -14,7 +15,9 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::paginate(25);
+        $users = User::where('id', '!=', Auth::user()->id)
+            ->orderBy('created_at', 'desc')
+            ->paginate(25);
         return view('users.index', compact('users'));
     }
 
