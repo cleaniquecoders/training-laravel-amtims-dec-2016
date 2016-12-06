@@ -1,20 +1,21 @@
 <div class="container">
 	<a href="{{ route($route.'.create') }}" class="btn btn-success pull-right">New Record</a>
 	{{ $resources->links() }}
+	<div class="table-responsive">
 	<table class="table table-condensed table-hover">
 		<thead>
 			<tr>
 				@foreach($headings as $heading)
 					<th>{{ $heading['label'] }}</th>
 				@endforeach
-				<th>Actions</th>
+				<th class="col-md-3">Actions</th>
 			</tr>
 		</thead>
 		<tbody>
 			@foreach($resources as $resource)
 				<tr>
 					@foreach($headings as $heading)
-						<td>{{ $resource->{$heading['attr']} }}</td>
+						<td>{{ (strpos($heading['attr'],'_at') === false) ? $resource->{$heading['attr']} : $resource->{$heading['attr']}->diffForHumans() }}</td>
 					@endforeach
 					<td>
 						@include('components.actions', ['route' => $route, 'resource' => $resource])
@@ -23,5 +24,6 @@
 			@endforeach
 		</tbody>
 	</table>
+	</div>
 	{{ $resources->links() }}
 </div>

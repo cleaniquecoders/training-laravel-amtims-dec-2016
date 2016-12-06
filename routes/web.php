@@ -22,3 +22,4 @@ Route::get('/about-us', 'StaticPageController@aboutUs')->name('static.aboutUs');
 Route::get('/contact-us', 'StaticPageController@contactUs')->name('static.contactUs');
 
 Route::resource('users', 'UserController');
+Route::resource('posts', 'PostController');
