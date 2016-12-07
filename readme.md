@@ -310,7 +310,7 @@ There's two category, one from route and the other one from controller's constru
 ### From Controller
 
 ```php
-public function __construc()
+public function __construct()
 {
     $this->middleware('auth');
 }
