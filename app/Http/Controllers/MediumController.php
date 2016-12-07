@@ -2,12 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreUserRequest;
-use App\User;
-use Auth;
 use Illuminate\Http\Request;
 
-class UserController extends Controller
+class MediumController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,10 +13,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::where('id', '!=', Auth::user()->id)
-            ->orderBy('created_at', 'desc')
-            ->paginate(25);
-        return view('users.index', compact('users'));
+        //
     }
 
     /**
@@ -29,7 +23,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('users.create');
+        //
     }
 
     /**
@@ -38,16 +32,9 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreUserRequest $request)
+    public function store(Request $request)
     {
-        // $this->validate($request, [
-        //     'name' => 'required|min:3|max:255',
-        //     'email' => 'required|email',
-        //     'password' => 'required|min:8|max:12',
-        // ]);
-        User::create($request->all());
-        flash('User successfully created.', 'success');
-        return redirect()->route('users.index');
+        //
     }
 
     /**
@@ -58,8 +45,7 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        $user = User::find($id);
-        return view('users.show', compact('user'));
+        //
     }
 
     /**
@@ -70,8 +56,7 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        $user = User::find($id);
-        return view('users.edit', compact('user'));
+        //
     }
 
     /**
@@ -83,8 +68,7 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        User::where('id', $id)->update($request->only('name', 'email'));
-        return redirect()->route('users.index');
+        //
     }
 
     /**
@@ -95,7 +79,6 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        User::destroy($id);
-        return redirect()->route('users.index');
+        //
     }
 }

@@ -15,6 +15,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/sample/form/collective', function () {
+    return view('samples.form-collective');
+});
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index');
@@ -23,3 +27,4 @@ Route::get('/contact-us', 'StaticPageController@contactUs')->name('static.contac
 
 Route::resource('users', 'UserController');
 Route::resource('posts', 'PostController');
+Route::resource('media', 'MediumController');
