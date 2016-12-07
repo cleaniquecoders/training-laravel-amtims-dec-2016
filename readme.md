@@ -27,6 +27,8 @@
 - [ ] How to setup custom validation error messages?
 - [ ] How to setup localization?
 - [ ] How to setup custom validation error messages with localization support?
+- [ ] How to register middleware?
+- [ ] How to use middleware?
 
 # How to create a page
 
@@ -288,3 +290,49 @@ Then make sure the language set is exist by duplicate the `resources/lang/en` to
 ## Setup Validation Messages
 
 Open up your `resources/lang/xx/validation.php` and update your key's values based on your language.
+
+# Middleware
+
+## Register Middleware
+
+Open up `app/Http/Kernel.php` and update any of the `Kernel` class properties, depends on your need.
+
+To register middleware globally, use `$middleware` property.
+
+To register middleware in group, use `$middlewareGroups` property.
+
+To register middleware for route, use `$routeMiddleware` property.
+
+## Middleware Usage
+
+There's two category, one from route and the other one from controller's constructor.
+
+### From Controller
+
+```php
+public function __construc()
+{
+    $this->middleware('auth');
+}
+```
+
+### From Route
+
+#### For Individual Route
+
+```php
+Route::get('/contact-us', 'StaticPageController@contactUs')->name('static.contactUs')->middleware('auth');
+```
+
+#### For Group Route
+
+```php
+Route::group([
+    'middleware' => ['auth'],
+    'prefix' => 'admin',
+], function () {
+    Route::resource('users', 'UserController');
+    Route::resource('posts', 'PostController');
+    Route::resource('media', 'MediumController');
+});
+```
