@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreUserRequest;
 use App\User;
 use Auth;
 use Illuminate\Http\Request;
@@ -37,8 +38,13 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreUserRequest $request)
     {
+        // $this->validate($request, [
+        //     'name' => 'required|min:3|max:255',
+        //     'email' => 'required|email',
+        //     'password' => 'required|min:8|max:12',
+        // ]);
         User::create($request->all());
         return redirect()->route('users.index');
     }
