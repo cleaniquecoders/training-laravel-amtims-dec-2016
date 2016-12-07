@@ -23,8 +23,14 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index');
 Route::get('/about-us', 'StaticPageController@aboutUs')->name('static.aboutUs');
-Route::get('/contact-us', 'StaticPageController@contactUs')->name('static.contactUs');
 
-Route::resource('users', 'UserController');
-Route::resource('posts', 'PostController');
-Route::resource('media', 'MediumController');
+Route::get('/contact-us', 'StaticPageController@contactUs')->name('static.contactUs')->middleware('auth');
+
+Route::group([
+    'middleware' => ['auth'],
+    'prefix' => 'admin',
+], function () {
+    Route::resource('users', 'UserController');
+    Route::resource('posts', 'PostController');
+    Route::resource('media', 'MediumController');
+});

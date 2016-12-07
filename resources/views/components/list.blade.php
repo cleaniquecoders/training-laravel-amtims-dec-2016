@@ -15,7 +15,7 @@
 			@foreach($resources as $resource)
 				<tr>
 					@foreach($headings as $heading)
-						<td>{{ (strpos($heading['attr'],'_at') === false) ? $resource->{$heading['attr']} : $resource->{$heading['attr']}->diffForHumans() }}</td>
+						<td>{{ (strpos($heading['attr'],'_at') === false) ? str_limit($resource->{$heading['attr']}, 50) : $resource->{$heading['attr']}->diffForHumans() }}</td>
 					@endforeach
 					<td>
 						@include('components.actions', ['route' => $route, 'resource' => $resource])
